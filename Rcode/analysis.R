@@ -7,6 +7,11 @@
 # - Data Source: FCC Fixed Broadband Deployment Data, December 2019 (NY only)
 # - Data File: Fixed_Broadband_Deployment_Data_December_2019_20240917.csv
 # - Programming Language: R
+#
+# - In the report, code for the following figures found in the following lines:
+# - Figure 1: Line 59
+# - Figure 2: Line 126
+# - Figure 3: Line 153
 # ============================================================
 
 # ============================================================
@@ -53,6 +58,7 @@ ny_blocks <- st_read("tabblock2010_36_pophu.shp")
 ny_blocks$block_code <- as.character(ny_blocks$BLOCKID10)
 merged_data <- merge(ny_blocks, providers_per_block, by = "block_code")
 
+# Figure 1
 # Plotting a choropleth map (there are better names for this but this makes it sound more fun)
 #library(ggplot2)
 ggplot(data = merged_data) +
@@ -72,7 +78,7 @@ ggplot(data = merged_data) +
     panel.grid.minor = element_blank()
   )
 
-# Adding in a histogram to see the distribution
+# Adding in a histogram to see the distribution (embedded in Figure 1)
 ggplot(providers_per_block, aes(x = provider_cnt)) +
   geom_histogram(
     binwidth = 1,
@@ -118,6 +124,7 @@ block_speed_providers <- merge(providers_per_block, speed_per_block, by = "block
 correlation_downstream <- cor(block_speed_providers$provider_cnt, block_speed_providers$max_downstream_speed, use = "complete.obs")
 correlation_upstream <- cor(block_speed_providers$provider_cnt, block_speed_providers$max_upstream_speed, use = "complete.obs")
 
+# Figure 2
 # Scatter Plots for Downstream and Upstream Speeds vs Providers
 ggplot(block_speed_providers, aes(x = provider_cnt, y = max_downstream_speed)) +
   geom_point(alpha = 0.5, color = "blue") +
@@ -142,6 +149,8 @@ ggplot(block_speed_providers, aes(x = provider_cnt, y = max_upstream_speed)) +
 # ============================================================
 # Upload/Download
 nyblocks_speed <- merge(ny_blocks, speed_per_block, by = "block_code")
+
+#Figure 3
 # Plotting a choropleth map for downstream
 ggplot(data = nyblocks_speed) +
   geom_sf(aes(fill = max_downstream_speed), color = NA) +
